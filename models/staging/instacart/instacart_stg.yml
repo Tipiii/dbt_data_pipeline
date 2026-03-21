@@ -1,0 +1,11 @@
+version: 2
+
+models:
+    - name: stg_aisles
+      description: "Bảng staging cho aisles"
+      columns:
+        - name: aisle_id
+          description: "Mã số của aisle"
+          test:
+            - not null
+            - unique
