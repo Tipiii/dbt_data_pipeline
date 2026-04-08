@@ -1,22 +1,22 @@
 # dbt Capstone with BigQuery
 
-Project nay xay dung pipeline mo hinh du lieu bang `dbt` tren `BigQuery` cho bo du lieu Instacart. Hien tai repo tap trung vao lop `staging`, chuan hoa du lieu tu cac bang raw va tao nen cac `view` de phuc vu cac buoc mo hinh hoa tiep theo.
+Project này xây dựng pipeline mô hình dữ liệu bằng `dbt` trên `BigQuery` cho bộ dữ liệu Instacart. Hiện tại repo tập trung vào lớp `staging`, chuẩn hóa dữ liệu từ các bảng raw và tạo nên các `view` để phục vụ các bước mô hình hóa tiếp theo.
 
-## Muc tieu project
+## Mục tiêu project
 
-- Ket noi du lieu raw Instacart tren BigQuery vao dbt
-- Xay dung lop `staging` de chuan hoa ten bang va quan ly transformation
-- Khai bao `source`, `schema test` va mo ta model bang file YAML
-- Chuan bi cau truc cho cac lop `raw_vault` va `business_vault` trong giai doan tiep theo
+- Kết nối dữ liệu raw Instacart trên BigQuery vào dbt
+- Xây dựng lớp `staging` để chuẩn hóa tên bảng và quản lý transformation
+- Khai báo `source`, `schema test` và mô tả model bằng file YAML
+- Chuẩn bị cấu trúc cho các lớp `raw_vault` và `business_vault` trong giai đoạn tiếp theo
 
-## Cong nghe su dung
+## Công nghệ sử dụng
 
 - `dbt Core`
 - `dbt-bigquery`
 - `Google BigQuery`
 - SQL + Jinja macro
 
-## Cau truc thu muc
+## Cấu trúc thư mục
 
 ```text
 .
@@ -45,9 +45,9 @@ Project nay xay dung pipeline mo hinh du lieu bang `dbt` tren `BigQuery` cho bo 
 `-- dbt_project.yml
 ```
 
-## Nguon du lieu
+## Nguồn dữ liệu
 
-Project dang khai bao source `raw_instacart` trong `models/sources.yml`, gom cac bang:
+Project đang khai báo source `raw_instacart` trong `models/sources.yml`, gồm các bảng:
 
 - `aisles`
 - `departments`
@@ -56,7 +56,7 @@ Project dang khai bao source `raw_instacart` trong `models/sources.yml`, gom cac
 - `orders`
 - `products`
 
-Trong pham vi hien tai, cac model staging da duoc tao cho:
+Trong phạm vi hiện tại, các model staging đã được tạo cho:
 
 - `stg_aisles`
 - `stg_departments`
@@ -64,92 +64,92 @@ Trong pham vi hien tai, cac model staging da duoc tao cho:
 - `stg_order_products_prior`
 - `stg_products`
 
-## Cach project dang hoat dong
+## Cách project đang hoạt động
 
-Moi model trong thu muc `models/staging/instacart/` se:
+Mỗi model trong thư mục `models/staging/instacart/` sẽ:
 
-1. Khai bao bang nguon can lay du lieu.
-2. Goi macro `stage` trong `macros/stage.sql`.
-3. Build thanh `view` trong schema staging theo cau hinh tai `dbt_project.yml`.
+1. Khai báo bảng nguồn cần lấy dữ liệu.
+2. Gọi macro `stage` trong `macros/stage.sql`.
+3. Build thành `view` trong schema staging theo cấu hình tại `dbt_project.yml`.
 
-Schema staging hien dang duoc cau hinh la `stg_instacart`.
+Schema staging hiện đang được cấu hình là `stg_instacart`.
 
-## Kiem thu du lieu
+## Kiểm thử dữ liệu
 
-Project da khai bao schema test trong `models/staging/instacart/instacart_stg.yml` cho mot so khoa chinh, chu yeu:
+Project đã khai báo schema test trong `models/staging/instacart/instacart_stg.yml` cho một số khóa chính, chủ yếu:
 
 - `not null`
 - `unique`
 
-Nhung test nay dang duoc ap dung cho cac cot dinh danh nhu:
+Những test này đang được áp dụng cho các cột định danh như:
 
 - `aisle_id`
 - `department_id`
 - `order_id`
 - `product_id`
 
-## Cach chay project
+## Cách chạy project
 
-### 1. Cai dat moi truong
+### 1. Cài đặt môi trường
 
-Ban can co:
+Bạn cần có:
 
 - Python
 - `dbt-core`
 - `dbt-bigquery`
-- file `profiles.yml` voi profile ten `dbt_bigquery`
-- quyen truy cap BigQuery va credentials hop le
+- file `profiles.yml` với profile tên `dbt_bigquery`
+- quyền truy cập BigQuery và credentials hợp lệ
 
-Vi du cai dat:
+Ví dụ cài đặt:
 
 ```bash
 pip install dbt-core dbt-bigquery
 ```
 
-### 2. Kiem tra ket noi
+### 2. Kiểm tra kết nối
 
 ```bash
 dbt debug
 ```
 
-### 3. Chay model staging
+### 3. Chạy model staging
 
 ```bash
 dbt run --select staging
 ```
 
-### 4. Chay test
+### 4. Chạy test
 
 ```bash
 dbt test --select staging
 ```
 
-### 5. Sinh tai lieu
+### 5. Sinh tài liệu
 
 ```bash
 dbt docs generate
 dbt docs serve
 ```
 
-## Tinh trang hien tai
+## Tình trạng hiện tại
 
-- Da co `source` cho bo du lieu Instacart
-- Da co cac model `staging` co ban tren BigQuery
-- Da co YAML mo ta model va schema test
-- Da co khung thu muc cho `raw_vault` va `business_vault`
-- Chua co model fact/dimension hoac business layer hoan chinh trong repo
+- Đã có `source` cho bộ dữ liệu Instacart
+- Đã có các model `staging` cơ bản trên BigQuery
+- Đã có YAML mô tả model và schema test
+- Đã có khung thư mục cho `raw_vault` và `business_vault`
+- Chưa có model fact/dimension hoặc business layer hoàn chỉnh trong repo
 
-## Huong phat trien tiep theo
+## Hướng phát triển tiếp theo
 
-- Bo sung model cho `order_products_train` neu can su dung tap train
-- Hoan thien `raw_vault` gom hub, link, satellite
-- Xay dung `business_vault` hoac mart phan tich
-- Bo sung them test quan he nhu `relationships`
-- Tao tai lieu lineage day du bang `dbt docs`
+- Bổ sung model cho `order_products_train` nếu cần sử dụng tập train
+- Hoàn thiện `raw_vault` gồm hub, link, satellite
+- Xây dựng `business_vault` hoặc mart phân tích
+- Bổ sung thêm test quan hệ như `relationships`
+- Tạo tài liệu lineage đầy đủ bằng `dbt docs`
 
-## Lenh Git co san trong repo
+## Lệnh Git có sẵn trong repo
 
-File `commands.md` hien dang luu cac lenh khoi tao Git co ban:
+File `commands.md` hiện đang lưu các lệnh khởi tạo Git cơ bản:
 
 ```bash
 git init
@@ -157,6 +157,6 @@ git add .
 git commit -m "init dbt project"
 ```
 
-## Ghi chu
+## Ghi chú
 
-README nay duoc viet dua tren trang thai hien tai cua repo. Neu ban tiep tuc xay dung them `raw_vault`, `business_vault` hoac data mart, phan mo ta kien truc va luong du lieu nen duoc cap nhat tiep de dong bo voi project.
+README này được viết dựa trên trạng thái hiện tại của repo. Nếu bạn tiếp tục xây dựng thêm `raw_vault`, `business_vault` hoặc data mart, phần mô tả kiến trúc và luồng dữ liệu nên được cập nhật tiếp để đồng bộ với project.
