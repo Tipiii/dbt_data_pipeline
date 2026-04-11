@@ -1,11 +1,12 @@
 {{ config(
     materialized = 'view',
+
 )}}
 
 
-{% set source_model = 'aisles' %}
+{% set source_model = 'products' %}
 {% set source_name = 'raw_instacart' %}
-{% set business_key_cols = ['aisle_id'] %}
+{% set business_key_cols = ['product_id'] %}
 
 
 {{ stage(

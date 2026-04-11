@@ -38,3 +38,7 @@ models:
     staging:
       +schema: stg_instacart
       +materialized: view
+
+    raw_vault:
+      +schema: raw_vault
+      +materialized: table
