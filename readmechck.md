@@ -38,13 +38,13 @@ flowchart LR
     Sources --> Staging --> RawVault --> BusinessVault
 ```
 
-| Layer | Materialization | Mục đích |
-|---|---|---|
-| Staging | `view` | Cast types, generate hash keys & hashdiff |
-| Hub | `incremental (merge)` | Business keys — 1 row/entity, không update |
-| Link | `incremental (merge)` | Quan hệ giữa các entities |
-| Satellite | `incremental (merge)` | Thuộc tính theo thời gian (CDC via hashdiff) |
-| PIT / Bridge | `incremental (merge)` | Snapshot & multi-hop join phục vụ reporting |
+| Layer | Materialization |
+|---|---|
+| Staging | `view` |
+| Hub | `incremental (merge)` |
+| Link | `incremental (merge)` |
+| Satellite | `incremental (merge)` |
+| PIT / Bridge | `incremental (merge)` |
 
 ---
 
@@ -66,17 +66,6 @@ pip install databricks-cli
 | Raw Vault DB (`ocb_datavault_{env}_cleaned`) | `CREATE TABLE`, `INSERT`, `SELECT` |
 | Service Principal | OAuth `client_id` + `client_secret` (hỏi infra team) |
 | GitLab | Developer role |
-
-**Biến môi trường** (mỗi env dùng bộ riêng — credentials lấy từ GitLab CI/CD Variables):
-
-```bash
-export DATABRICKS_HOST="https://<workspace>.azuredatabricks.net"
-export DATABRICKS_SQL_WAREHOUSE_HTTP_PATH="/sql/1.0/warehouses/<id>"
-export DATABRICKS_CLIENT_ID="<client-id>"
-export DATABRICKS_CLIENT_SECRET="<client-secret>"
-export DATABRICKS_DESTINATION_CATALOG="ocb_datavault_{dev|pilotcloud|prod}_cleaned"
-export DATABRICKS_DESTINATION_SCHEMA="raw_vault"
-```
 
 ---
 
@@ -115,25 +104,8 @@ dbt run --target pilotcloud --vars '{"target_date": "20250415"}'
 Mỗi model dùng `target_date` (format: `YYYYMMDD`) để lọc theo ngày. Incremental merge đảm bảo idempotent — chạy lại cùng ngày vẫn an toàn.
 
 ```bash
-# Backfill 1 ngày
+# Backfill
 dbt run --vars '{"target_date": "20250101", "run_mode": "backfill"}' --target dev
-
-# Backfill range (shell loop)
-for d in $(python3 -c "
-from datetime import date, timedelta
-d = date(2025,1,1)
-while d <= date(2025,1,31):
-    print(d.strftime('%Y%m%d')); d += timedelta(1)"); do
-  dbt run --select tag:t24 --vars "{\"target_date\": \"$d\", \"run_mode\": \"backfill\"}"
-done
-```
-
-**Production**: dùng Databricks Job (`resources/`) với `for_each_task` để chạy song song theo ngày:
-
-```bash
-databricks bundle deploy --target dev
-databricks jobs run-now --job-id <job_id> \
-  --job-parameters '{"start_date": "2025-01-01", "end_date": "2025-01-31", "run_mode": "backfill"}'
 ```
 
 ---
@@ -173,28 +145,4 @@ flowchart TD
     hub_account & sat_account_balance --> pit_account
     hub_customer & hub_account & hub_loan & hub_branch & link_customer_account & link_account_loan --> bridge_account
     hub_account & sat_account_balance --> sat_computed_account_segment
-```
-
-**Hub entities chính:**
-
-| Hub | Business Key | Source |
-|---|---|---|
-| `hub_customer` | customer_id | T24, Omni, CRM |
-| `hub_account` | account_number | T24, BPM |
-| `hub_loan` | loan_id / contract_id | T24, BPM |
-| `hub_card` | card_number | WAY4 |
-| `hub_branch` | branch_code | T24 |
-| `hub_collateral` | collateral_id | T24, BPM |
-
-**Naming convention:**
-
-```
-v_stg_{source}_{table}     # Staging
-hub_{entity}               # Hub
-link_{entity1}_{entity2}   # Link
-sat_{entity}_{attr_group}  # Satellite
-effsat_link_{link_name}    # Effectivity Satellite
-pit_{entity}               # Point In Time
-bridge_{entity}            # Bridge
-sat_computed_{entity}_{metric}  # Computed Satellite
 ```
