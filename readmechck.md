@@ -1,5 +1,9 @@
 ![OCB Logo](https://upload.wikimedia.org/wikipedia/vi/e/e5/Logo-Ngan_hang_Phuong_Dong.png)
 
+![Profile Photo](https://media.licdn.com/dms/image/v2/C4D03AQGSUdBr9040Ww/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1516577445013?e=1778112000&v=beta&t=46ezdKquRRNuunPiI9Kc3JCPdgYix-GcwiaG0WhJT0g)
+
+![Raffles Logo](https://media.licdn.com/dms/image/v2/C560BAQHXMNx-QKI7Nw/company-logo_200_200/company-logo_200_200/0/1630657899648?e=2147483647&v=beta&t=OiX0gjlO85FQ_8F8n9MQUjNIKe-o6BjhcDFvxbDohHQ)
+
 # OCB Data Vault 2.0 — dbt on Databricks
 
 > **Project**: `datavaultmodel2` · **Org**: OCB (Ocean Commercial Bank)  
