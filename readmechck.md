@@ -20,22 +20,7 @@ Data Warehouse chuẩn **Data Vault 2.0** cho OCB, tích hợp 6 hệ thống ng
 
 ---
 
-## 2. Architecture Diagram
-
-```mermaid
-flowchart LR
-    subgraph Sources["Bronze"]
-        T24 & WAY4 & Omni & BPM & CRM & CC
-    end
-    subgraph Staging["Staging (Views)\nv_stg_{source}_{table}"]
-    end
-    subgraph RawVault["Raw Vault (Incremental Delta)"]
-        HUB["HUBs · 83"] & LNK["LINKs · 197"] & SAT["SATs · 286"] & REF["REFs"]
-    end
-    subgraph BusinessVault["Business Vault"]
-        PIT["PITs · 5"] & BRG["Bridges · 5"] & SATC["Computed Sats · 2"] & SAL["SAL"]
-    end
-    Sources --> Staging --> RawVault --> BusinessVault
+## 2. Architecture 
 ```
 
 | Layer | Materialization |
@@ -50,37 +35,56 @@ flowchart LR
 
 ## 3. Prerequisites
 
-**Cài đặt:**
+### Công cụ cần cài
 
 ```bash
+# Python >= 3.10
+python --version
+
+# dbt với adapter Databricks
 pip install dbt-databricks
+
+# Databricks CLI (để deploy bundles)
 pip install databricks-cli
+# hoặc
+brew install databricks  # macOS
+
+# Kiểm tra version
+dbt --version
+databricks --version
 ```
-
-**Quyền truy cập cần thiết:**
-
-| Resource | Quyền |
-|---|---|
-| Databricks Workspace | SQL Warehouse, Unity Catalog |
-| Bronze DB (`ocb_datavault_{env}_sourcing`) | `SELECT` |
-| Raw Vault DB (`ocb_datavault_{env}_cleaned`) | `CREATE TABLE`, `INSERT`, `SELECT` |
-| Service Principal | OAuth `client_id` + `client_secret` (hỏi infra team) |
-| GitLab | Developer role |
-
 ---
 
 ## 4. Setup Guide
+
+- [Databricks configurations](https://docs.getdbt.com/reference/resource-configs/databricks-configs?version=1.12)
+- [Connect Databricks to dbt Core](https://docs.getdbt.com/docs/local/connect-data-platform/databricks-setup?version=1.12)
+
+### Profile Setup
+
+File `profiles.yml` đã có sẵn trong repo. Nó đọc thông tin kết nối từ environment variables (xem mục 3).
+
+```yaml
+# profiles.yml (đã có trong repo)
+datavault-model:
+  target: dev
+  outputs:
+    dev:
+      type: databricks
+      host: "{{ env_var('DATABRICKS_HOST') }}"
+      http_path: "{{ env_var('DATABRICKS_SQL_WAREHOUSE_HTTP_PATH') }}"
+      client_id: "{{ env_var('DATABRICKS_CLIENT_ID') }}"
+      client_secret: "{{ env_var('DATABRICKS_CLIENT_SECRET') }}"
+      catalog: "{{ env_var('DATABRICKS_DESTINATION_CATALOG') }}"
+      schema: "{{ env_var('DATABRICKS_DESTINATION_SCHEMA') }}"
+      threads: 20
+```
 
 ```bash
 # 1. Clone & install
 git clone <repository-url> && cd datavault-model
 pip install -r requirements.txt
 
-# 2. Kiểm tra kết nối
-dbt debug
-
-# 3. Chạy pipeline (daily)
-dbt run --vars '{"target_date": "20250415", "run_mode": "daily"}' --target dev
 
 # Chạy theo source
 dbt run --select tag:t24 --vars '{"target_date": "20250415", "run_mode": "daily"}'
@@ -90,12 +94,6 @@ dbt run --select raw_vault.*
 dbt run --select business_vault.*
 ```
 
-`profiles.yml` đọc credentials từ env vars, có sẵn trong repo với `auth_type: oauth` cho cả 3 targets: `dev`, `pilotcloud`, `prod`.
-
-```bash
-# Chạy với target cụ thể
-dbt run --target pilotcloud --vars '{"target_date": "20250415"}'
-```
 
 ---
 
@@ -112,37 +110,15 @@ dbt run --vars '{"target_date": "20250101", "run_mode": "backfill"}' --target de
 
 ## 6. Troubleshooting
 
-| Lỗi | Nguyên nhân | Cách fix |
-|---|---|---|
-| `PermissionDenied` | Sai credentials hoặc token hết hạn | Kiểm tra `DATABRICKS_CLIENT_ID/SECRET`, chạy `dbt debug` |
-| `Column not found in contract` | Cột mới chưa khai báo trong schema yml | Thêm cột vào `*_schema*.yml` |
-| `on_schema_change: fail` | Source thêm cột mới | `dbt run --select <model> --full-refresh` |
-| Duplicate records | `unique_key` thiếu (`hashkey` + `hashdiff`) | Full refresh + kiểm tra lại config `unique_key` |
-| `target_date` không lọc đúng | Sai format (dùng `-` thay vì liền) | Format đúng: `"20250415"`, không phải `"2025-04-15"` |
-| `User does not have CREATE privilege` | Thiếu quyền Unity Catalog | Admin chạy `GRANT CREATE, USAGE ON SCHEMA ... TO ...` |
-| Job backfill timeout | Range quá lớn | Chia nhỏ theo tuần, chạy từng source tag riêng |
-| `hashkey` / `hashdiff` = NULL | Cột input của macro bị NULL | Kiểm tra `COALESCE` trong staging model hoặc macro `hash.sql` |
+- [Troubleshoot the Databricks CLI](https://docs.databricks.com/aws/en/dev-tools/cli/troubleshooting)
 
 ---
 
-## 7. Data Lineage
+## 7. Documentation
 
-```mermaid
-flowchart TD
-    T24["T24 (~100 tables)"] --> V_T24["v_stg_t24_* (~60 views)"]
-    WAY4["WAY4 (~20 tables)"] --> V_W4["v_stg_way4_* (~25 views)"]
-    Omni["Omni (~40 tables)"] --> V_OM["v_stg_omni_* (~30 views)"]
-    BPM["BPM (~30 tables)"] --> V_BP["v_stg_bpm_* (~35 views)"]
-    CRM["CRM (~7 tables)"] --> V_CR["v_stg_crm_* (~10 views)"]
-    CC["Call Center"] --> V_CC["v_stg_callcenter_*"]
+Tài liệu tham khảo:
 
-    V_T24 --> hub_customer & hub_account & hub_loan & hub_branch
-    V_W4 --> hub_card
-    V_T24 --> link_customer_account & link_account_loan & link_account_branch
-    V_T24 --> sat_customer_information & sat_account_balance & sat_loan_status
+- [dbt Core (phiên bản 1.12)](https://docs.getdbt.com/docs/introduction?version=1.12)
+- [Data Vault 2.0](https://datafinder.ru/files/downloads/01/Building-a-Scalable-Data-Warehouse-with-Data-Vault-2.0.pdf)
+- [GitHub: dbt Databricks adapter](https://github.com/databricks/dbt-databricks)
 
-    hub_customer & sat_customer_information --> pit_customer
-    hub_account & sat_account_balance --> pit_account
-    hub_customer & hub_account & hub_loan & hub_branch & link_customer_account & link_account_loan --> bridge_account
-    hub_account & sat_account_balance --> sat_computed_account_segment
-```
