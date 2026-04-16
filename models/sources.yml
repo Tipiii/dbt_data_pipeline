@@ -11,9 +11,9 @@ sources:
         description: "Chứa thông tin về các danh mục/quầy trong cửa hàng"
       - name: departments
         description: "Chứa thông tin về danh mục ngành hàng trong cửa hàng"
-      - name: order_product_prior
+      - name: order_products_prior
         description: "Chứa thông tin về chi tiết sản phẩm trong các đơn prior"
-      - name: order_product_train
+      - name: order_products_train
         description: "Chứa thông tin về chi tiết sản phẩm trong các đơn train"
       - name: orders
         description: "Chứa thông tin về các đơn hàng của khách hàng"
