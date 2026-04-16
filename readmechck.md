@@ -1,3 +1,5 @@
+![OCB Logo](https://upload.wikimedia.org/wikipedia/vi/e/e5/Logo-Ngan_hang_Phuong_Dong.png)
+
 # OCB Data Vault 2.0 — dbt on Databricks
 
 > **Project**: `datavaultmodel2` · **Org**: OCB (Ocean Commercial Bank)  
