@@ -30,7 +30,7 @@ Data Warehouse chuẩn **Data Vault 2.0** cho OCB, tích hợp 6 hệ thống ng
 | Link | `incremental (merge)` |
 | Satellite | `incremental (merge)` |
 | PIT / Bridge | `incremental (merge)` |
-
+```
 ---
 
 ## 3. Prerequisites
@@ -80,12 +80,8 @@ datavault-model:
       threads: 20
 ```
 
+### dbt Run
 ```bash
-# 1. Clone & install
-git clone <repository-url> && cd datavault-model
-pip install -r requirements.txt
-
-
 # Chạy theo source
 dbt run --select tag:t24 --vars '{"target_date": "20250415", "run_mode": "daily"}'
 
