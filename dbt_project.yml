@@ -42,3 +42,7 @@ models:
     raw_vault:
       +schema: raw_vault
       +materialized: table
+
+    marts:
+      +schema: marts
+      +materialized: table
