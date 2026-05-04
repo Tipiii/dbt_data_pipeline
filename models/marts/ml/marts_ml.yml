@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: ml_reorder_candidates
+    description: "Feature table o grain order-product de train va score bai toan reorder prediction."
+    columns:
+      - name: candidate_key
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        tests:
+          - not_null
+      - name: user_id
+        tests:
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+      - name: eval_set
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['train', 'test']
+      - name: product_name
+        tests:
+          - not_null
+      - name: aisle_id
+        tests:
+          - not_null
+      - name: department_id
+        tests:
+          - not_null
+      - name: user_prior_order_count
+        tests:
+          - not_null
+      - name: product_prior_order_count
+        tests:
+          - not_null
+      - name: up_order_count
+        tests:
+          - not_null
+      - name: up_orders_since_last_purchase
+        tests:
+          - not_null
