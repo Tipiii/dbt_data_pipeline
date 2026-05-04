@@ -1,0 +1,95 @@
+version: 2
+
+models:
+  - name: rpt_department_reorder_cohort
+    description: "Bang cohort theo department va thu tu don hang dau tien cua user trong department do."
+    columns:
+      - name: cohort_row_key
+        data_tests:
+          - not_null
+          - unique
+      - name: department_id
+        data_tests:
+          - not_null
+      - name: department
+        data_tests:
+          - not_null
+      - name: first_department_order_number
+        data_tests:
+          - not_null
+      - name: orders_since_first_department_order
+        data_tests:
+          - not_null
+      - name: cohort_user_count
+        data_tests:
+          - not_null
+      - name: active_user_count
+        data_tests:
+          - not_null
+      - name: active_user_retention_rate
+        data_tests:
+          - not_null
+
+  - name: rpt_product_affinity
+    description: "Bang tong hop cap san pham thuong duoc mua cung nhau de phan tich basket affinity."
+    columns:
+      - name: product_pair_key
+        data_tests:
+          - not_null
+          - unique
+      - name: product_id_a
+        data_tests:
+          - not_null
+      - name: product_name_a
+        data_tests:
+          - not_null
+      - name: product_id_b
+        data_tests:
+          - not_null
+      - name: product_name_b
+        data_tests:
+          - not_null
+      - name: pair_order_count
+        data_tests:
+          - not_null
+      - name: support_rate
+        data_tests:
+          - not_null
+      - name: confidence_a_to_b
+        data_tests:
+          - not_null
+      - name: confidence_b_to_a
+        data_tests:
+          - not_null
+      - name: lift
+        data_tests:
+          - not_null
+
+  - name: rpt_product_reorder_ranking
+    description: "Bang xep hang san pham theo reorder rate, weighted reorder score va demand."
+    columns:
+      - name: product_id
+        data_tests:
+          - not_null
+          - unique
+      - name: product_name
+        data_tests:
+          - not_null
+      - name: department_id
+        data_tests:
+          - not_null
+      - name: department
+        data_tests:
+          - not_null
+      - name: product_order_count
+        data_tests:
+          - not_null
+      - name: reorder_rate
+        data_tests:
+          - not_null
+      - name: weighted_reorder_score
+        data_tests:
+          - not_null
+      - name: weighted_reorder_rank_overall
+        data_tests:
+          - not_null
