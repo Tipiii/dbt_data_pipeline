@@ -55,7 +55,14 @@ scored as (
 )
 
 select
-    *,
+    product_id,
+    product_name,
+    department_id,
+    department,
+    product_order_count,
+    reordered_line_count,
+    reorder_rate,
+    weighted_reorder_score,
     rank() over (
         order by reorder_rate desc, product_order_count desc, product_id
     ) as reorder_rate_rank_overall,
@@ -64,17 +71,5 @@ select
     ) as weighted_reorder_rank_overall,
     rank() over (
         order by product_order_count desc, reorder_rate desc, product_id
-    ) as demand_rank_overall,
-    rank() over (
-        partition by department_id
-        order by reorder_rate desc, product_order_count desc, product_id
-    ) as reorder_rate_rank_in_department,
-    rank() over (
-        partition by department_id
-        order by weighted_reorder_score desc, product_order_count desc, product_id
-    ) as weighted_reorder_rank_in_department,
-    rank() over (
-        partition by department_id
-        order by product_order_count desc, reorder_rate desc, product_id
-    ) as demand_rank_in_department
+    ) as demand_rank_overall
 from scored

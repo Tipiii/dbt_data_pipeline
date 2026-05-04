@@ -62,11 +62,7 @@ select
     activity.orders_since_first_department_order,
     sizes.cohort_user_count,
     activity.active_user_count,
-    activity.returning_user_count,
-    safe_divide(activity.active_user_count, sizes.cohort_user_count) as active_user_retention_rate,
-    safe_divide(activity.returning_user_count, sizes.cohort_user_count) as returning_user_rate,
-    activity.active_order_count,
-    activity.department_line_count
+    safe_divide(activity.active_user_count, sizes.cohort_user_count) as active_user_retention_rate
 from cohort_activity as activity
 inner join cohort_sizes as sizes
     on activity.department_id = sizes.department_id
