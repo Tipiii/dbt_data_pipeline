@@ -1,0 +1,333 @@
+id: dbt_bigquery_raw_vault
+namespace: dbt_capstone
+
+tasks:
+  - id: dbt_project
+    type: io.kestra.plugin.core.flow.WorkingDirectory
+    tasks:
+      - id: clone_repo
+        type: io.kestra.plugin.git.Clone
+        url: https://github.com/Tipiii/dbt_data_pipeline.git
+        branch: dev
+
+      - id: build_hub_aisle
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select hub_aisle
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_hub_department
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select hub_department
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_hub_order
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select hub_order
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_hub_product
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select hub_product
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_hub_user
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select hub_user
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_link_order_product
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select link_order_product
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_link_order_user
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select link_order_user
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_link_product_aisle
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select link_product_aisle
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_link_product_department
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select link_product_department
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_sat_aisle_details
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select sat_aisle_details
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_sat_department_details
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select sat_department_details
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_sat_order_details
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select sat_order_details
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_sat_order_product_details
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select sat_order_product_details
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_sat_product_details
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt build --select sat_product_details
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1

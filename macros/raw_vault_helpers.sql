@@ -6,6 +6,7 @@
   {%- endif -%}
 {%- endmacro %}
 
+
 {% macro raw_vault_unique_columns(primary_columns, extra_columns=[]) -%}
   {% set namespace = namespace(columns=[]) %}
   {% for column in raw_vault_as_list(primary_columns) + raw_vault_as_list(extra_columns) %}
@@ -20,6 +21,19 @@
   {%- for column in raw_vault_as_list(columns) -%}
     {{ column }} is not null{% if not loop.last %} and {% endif %}
   {%- endfor -%}
+{%- endmacro %}
+
+{% macro raw_vault_incremental_not_exists(source_alias, key_columns, target_alias='existing') -%}
+  {% if is_incremental() %}
+where not exists (
+    select 1
+    from {{ this }} as {{ target_alias }}
+    where
+      {%- for column in raw_vault_as_list(key_columns) %}
+        {{ target_alias }}.{{ column }} = {{ source_alias }}.{{ column }}{% if not loop.last %} and{% endif %}
+      {%- endfor %}
+)
+  {% endif %}
 {%- endmacro %}
 
 {% macro raw_vault_union_sources(source_models, columns) -%}

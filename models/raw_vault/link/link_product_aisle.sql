@@ -1,3 +1,10 @@
+{{ config(
+    materialized='incremental',
+    incremental_strategy='merge',
+    unique_key='hk_link_product_aisle',
+    on_schema_change='sync_all_columns'
+) }}
+
 {{ build_link(
     source_models=['stg_products'],
     link_hk_column='hk_link_product_aisle',

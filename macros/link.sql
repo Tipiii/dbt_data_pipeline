@@ -1,4 +1,5 @@
 {% macro build_link(source_models, link_hk_column, link_key_columns, hub_key_map) -%}
+
 {% set namespace = namespace(hub_source_columns=[]) %}
 {% for _, source_columns in hub_key_map.items() %}
   {% for column in raw_vault_as_list(source_columns) %}
@@ -30,7 +31,12 @@ deduped as (
         partition by {{ link_hk_column }}
         order by load_timestamp, record_source
     ) = 1
+),
+incremental_rows as (
+    select *
+    from deduped
+    {{ raw_vault_incremental_not_exists('deduped', [link_hk_column]) }}
 )
 select *
-from deduped
+from incremental_rows
 {%- endmacro %}
