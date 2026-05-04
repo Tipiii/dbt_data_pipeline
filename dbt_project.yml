@@ -32,7 +32,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   dbt_capstone:
     # Config indicated by + and applies to all files under models/example/
-
     staging:
       +schema: stg_instacart
       +materialized: view
@@ -42,5 +41,10 @@ models:
       +materialized: table
 
     marts:
-      +schema: marts
       +materialized: table
+      core:
+        +schema: marts_core
+      ml:
+        +schema: marts_ml
+      powerbi:
+        +schema: marts_powerbi
