@@ -1,4 +1,5 @@
 {% macro build_hub(source_models, hk_column, business_key_columns) -%}
+
 with source_data as (
     select
         {{ hash_columns(business_key_columns) }} as {{ hk_column }},
@@ -19,7 +20,12 @@ deduped as (
         partition by {{ hk_column }}
         order by load_timestamp, record_source
     ) = 1
+),
+incremental_rows as (
+    select *
+    from deduped
+    {{ raw_vault_incremental_not_exists('deduped', [hk_column]) }}
 )
 select *
-from deduped
+from incremental_rows
 {%- endmacro %}

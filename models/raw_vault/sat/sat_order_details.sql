@@ -1,3 +1,10 @@
+{{ config(
+    materialized='incremental',
+    incremental_strategy='merge',
+    unique_key=['hk_order', 'hashdiff'],
+    on_schema_change='sync_all_columns'
+) }}
+
 {{ build_sat(
     source_models=['stg_orders'],
     parent_hk_column='hk_order',

@@ -1,4 +1,5 @@
 {% macro build_sat(source_models, parent_hk_column, parent_key_columns, hashdiff_columns_list, payload_columns) -%}
+
 {% set source_columns = raw_vault_unique_columns(parent_key_columns, payload_columns + ['source_event_date']) %}
 
 with source_data as (
@@ -24,7 +25,12 @@ deduped as (
         partition by {{ parent_hk_column }}, hashdiff
         order by load_timestamp, record_source
     ) = 1
+),
+incremental_rows as (
+    select *
+    from deduped
+    {{ raw_vault_incremental_not_exists('deduped', [parent_hk_column, 'hashdiff']) }}
 )
 select *
-from deduped
+from incremental_rows
 {%- endmacro %}
