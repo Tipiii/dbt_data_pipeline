@@ -18,7 +18,7 @@ tasks:
         inputFiles:
           service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
         commands:
-          - dbt build --select dim_aisles
+          - dbt run --select dim_aisles
         profiles: |
           dbt_bigquery:
             target: dev
@@ -41,30 +41,7 @@ tasks:
         inputFiles:
           service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
         commands:
-          - dbt build --select dim_departments
-        profiles: |
-          dbt_bigquery:
-            target: dev
-            outputs:
-              dev:
-                type: bigquery
-                method: service-account
-                project: project-57a003b3-e918-4bc9-b43
-                dataset: dbt_dev_toni
-                keyfile: service-account.json
-                threads: 4
-                timeout_seconds: 300
-                location: asia-southeast1
-
-      - id: build_dim_users
-        type: io.kestra.plugin.dbt.cli.DbtCLI
-        taskRunner:
-          type: io.kestra.plugin.scripts.runner.docker.Docker
-        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
-        inputFiles:
-          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
-        commands:
-          - dbt build --select dim_users
+          - dbt run --select dim_departments
         profiles: |
           dbt_bigquery:
             target: dev
@@ -87,7 +64,7 @@ tasks:
         inputFiles:
           service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
         commands:
-          - dbt build --select dim_products
+          - dbt run --select dim_products
         profiles: |
           dbt_bigquery:
             target: dev
@@ -110,7 +87,30 @@ tasks:
         inputFiles:
           service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
         commands:
-          - dbt build --select dim_orders
+          - dbt run --select dim_orders
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: build_dim_users
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt run --select dim_users
         profiles: |
           dbt_bigquery:
             target: dev
@@ -133,7 +133,7 @@ tasks:
         inputFiles:
           service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
         commands:
-          - dbt build --select fct_order_products
+          - dbt run --select fct_order_products
         profiles: |
           dbt_bigquery:
             target: dev
@@ -156,7 +156,7 @@ tasks:
         inputFiles:
           service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
         commands:
-          - dbt build --select rpt_department_reorder_cohort
+          - dbt run --select rpt_department_reorder_cohort
         profiles: |
           dbt_bigquery:
             target: dev
@@ -179,7 +179,7 @@ tasks:
         inputFiles:
           service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
         commands:
-          - dbt build --select rpt_product_affinity
+          - dbt run --select rpt_product_affinity
         profiles: |
           dbt_bigquery:
             target: dev
@@ -202,7 +202,7 @@ tasks:
         inputFiles:
           service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
         commands:
-          - dbt build --select rpt_product_reorder_ranking
+          - dbt run --select rpt_product_reorder_ranking
         profiles: |
           dbt_bigquery:
             target: dev
@@ -225,7 +225,76 @@ tasks:
         inputFiles:
           service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
         commands:
-          - dbt build --select ml_reorder_candidates
+          - dbt run --select ml_reorder_candidates
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: test_marts_core
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt test --select path:models/marts/core
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: test_marts_powerbi
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt test --select path:models/marts/powerbi
+        profiles: |
+          dbt_bigquery:
+            target: dev
+            outputs:
+              dev:
+                type: bigquery
+                method: service-account
+                project: project-57a003b3-e918-4bc9-b43
+                dataset: dbt_dev_toni
+                keyfile: service-account.json
+                threads: 4
+                timeout_seconds: 300
+                location: asia-southeast1
+
+      - id: test_marts_ml
+        type: io.kestra.plugin.dbt.cli.DbtCLI
+        taskRunner:
+          type: io.kestra.plugin.scripts.runner.docker.Docker
+        containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
+        inputFiles:
+          service-account.json: "{{ secret('GCP_SERVICE_ACCOUNT_JSON') }}"
+        commands:
+          - dbt test --select path:models/marts/ml
         profiles: |
           dbt_bigquery:
             target: dev

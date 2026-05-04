@@ -55,30 +55,16 @@ select
     pairs.product_pair_key,
     pairs.product_id_a,
     pairs.product_name_a,
-    pairs.aisle_id_a,
-    pairs.aisle_a,
-    pairs.department_id_a,
-    pairs.department_a,
     pairs.product_id_b,
     pairs.product_name_b,
-    pairs.aisle_id_b,
-    pairs.aisle_b,
-    pairs.department_id_b,
-    pairs.department_b,
     pairs.pair_order_count,
-    pairs.pair_user_count,
-    stats_a.product_order_count as product_a_order_count,
-    stats_b.product_order_count as product_b_order_count,
-    stats_a.product_user_count as product_a_user_count,
-    stats_b.product_user_count as product_b_user_count,
     safe_divide(pairs.pair_order_count, totals.total_order_count) as support_rate,
     safe_divide(pairs.pair_order_count, stats_a.product_order_count) as confidence_a_to_b,
     safe_divide(pairs.pair_order_count, stats_b.product_order_count) as confidence_b_to_a,
     safe_divide(
         pairs.pair_order_count * totals.total_order_count,
         stats_a.product_order_count * stats_b.product_order_count
-    ) as lift,
-    pairs.department_id_a = pairs.department_id_b as is_same_department_pair
+    ) as lift
 from product_pairs as pairs
 cross join order_totals as totals
 inner join product_stats as stats_a
