@@ -5,223 +5,223 @@ models:
     description: "Dimension danh muc aisle cho phan tich san pham."
     columns:
       - name: hk_aisle
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: aisle_id
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: aisle
-        tests:
+        data_tests:
           - not_null
 
   - name: dim_departments
     description: "Dimension danh muc department cho phan tich san pham."
     columns:
       - name: hk_department
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: department_id
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: department
-        tests:
+        data_tests:
           - not_null
 
   - name: dim_products
     description: "Dimension san pham, co kem aisle va department de dung truc tiep trong Power BI."
     columns:
       - name: hk_product
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: product_id
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: product_name
-        tests:
+        data_tests:
           - not_null
       - name: hk_aisle
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_aisles')
               field: hk_aisle
       - name: hk_department
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_departments')
               field: hk_department
       - name: aisle_id
-        tests:
+        data_tests:
           - not_null
       - name: aisle
-        tests:
+        data_tests:
           - not_null
       - name: department_id
-        tests:
+        data_tests:
           - not_null
       - name: department
-        tests:
+        data_tests:
           - not_null
 
   - name: dim_orders
     description: "Dimension don hang, gom user va cac thuoc tinh thoi gian/mau train-test cua Instacart."
     columns:
       - name: hk_order
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: order_id
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: hk_user
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_users')
               field: hk_user
       - name: user_id
-        tests:
+        data_tests:
           - not_null
       - name: eval_set
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: ['prior', 'train', 'test']
       - name: order_number
-        tests:
+        data_tests:
           - not_null
       - name: order_dow
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: [0, 1, 2, 3, 4, 5, 6]
               quote: false
       - name: order_dow_name
-        tests:
+        data_tests:
           - not_null
       - name: order_hour_of_day
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
               quote: false
       - name: is_first_order
-        tests:
+        data_tests:
           - not_null
 
   - name: dim_users
     description: "Dimension user, kem mot so chi so tong hop theo lich su don hang."
     columns:
       - name: hk_user
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: user_id
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: total_orders
-        tests:
+        data_tests:
           - not_null
       - name: first_order_number
-        tests:
+        data_tests:
           - not_null
       - name: latest_order_number
-        tests:
+        data_tests:
           - not_null
 
   - name: fct_order_products
     description: "Fact o grain moi dong la mot san pham trong mot don hang."
     columns:
       - name: hk_link_order_product
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: hk_order
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_orders')
               field: hk_order
       - name: hk_product
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_products')
               field: hk_product
       - name: hk_user
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_users')
               field: hk_user
       - name: hk_aisle
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_aisles')
               field: hk_aisle
       - name: hk_department
-        tests:
+        data_tests:
           - not_null
           - relationships:
               to: ref('dim_departments')
               field: hk_department
       - name: order_id
-        tests:
+        data_tests:
           - not_null
       - name: product_id
-        tests:
+        data_tests:
           - not_null
       - name: user_id
-        tests:
+        data_tests:
           - not_null
       - name: aisle_id
-        tests:
+        data_tests:
           - not_null
       - name: department_id
-        tests:
+        data_tests:
           - not_null
       - name: eval_set
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: ['prior', 'train', 'test']
       - name: order_number
-        tests:
+        data_tests:
           - not_null
       - name: order_dow
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: [0, 1, 2, 3, 4, 5, 6]
               quote: false
       - name: order_hour_of_day
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
               quote: false
       - name: add_to_cart_order
-        tests:
+        data_tests:
           - not_null
       - name: reordered
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: [0, 1]
               quote: false
       - name: is_reordered
-        tests:
+        data_tests:
           - not_null
       - name: basket_size
-        tests:
+        data_tests:
           - not_null
