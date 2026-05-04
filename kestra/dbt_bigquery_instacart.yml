@@ -12,8 +12,6 @@ tasks:
 
       - id: build_staging
         type: io.kestra.plugin.dbt.cli.DbtCLI
-        dependsOn:
-          - clone_repo
         taskRunner:
           type: io.kestra.plugin.scripts.runner.docker.Docker
         containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
@@ -37,8 +35,6 @@ tasks:
 
       - id: build_raw_vault
         type: io.kestra.plugin.dbt.cli.DbtCLI
-        dependsOn:
-          - build_staging
         taskRunner:
           type: io.kestra.plugin.scripts.runner.docker.Docker
         containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
@@ -62,8 +58,6 @@ tasks:
 
       - id: build_marts_core
         type: io.kestra.plugin.dbt.cli.DbtCLI
-        dependsOn:
-          - build_raw_vault
         taskRunner:
           type: io.kestra.plugin.scripts.runner.docker.Docker
         containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
@@ -87,8 +81,6 @@ tasks:
 
       - id: build_marts_powerbi
         type: io.kestra.plugin.dbt.cli.DbtCLI
-        dependsOn:
-          - build_marts_core
         taskRunner:
           type: io.kestra.plugin.scripts.runner.docker.Docker
         containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
@@ -112,8 +104,6 @@ tasks:
 
       - id: build_marts_ml
         type: io.kestra.plugin.dbt.cli.DbtCLI
-        dependsOn:
-          - build_marts_core
         taskRunner:
           type: io.kestra.plugin.scripts.runner.docker.Docker
         containerImage: ghcr.io/dbt-labs/dbt-bigquery:1.8.latest
