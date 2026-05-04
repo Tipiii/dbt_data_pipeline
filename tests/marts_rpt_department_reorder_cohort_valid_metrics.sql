@@ -5,8 +5,5 @@ where first_department_order_number < 1
    or cohort_user_count < 1
    or active_user_count < 1
    or active_user_count > cohort_user_count
-   or returning_user_count > active_user_count
    or active_user_retention_rate < 0
    or active_user_retention_rate > 1
-   or returning_user_rate < 0
-   or returning_user_rate > 1
