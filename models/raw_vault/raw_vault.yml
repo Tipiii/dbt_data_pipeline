@@ -5,11 +5,11 @@ models:
     description: "Hub cho business key aisle_id"
     columns:
       - name: hk_aisle
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: aisle_id
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -17,11 +17,11 @@ models:
     description: "Hub cho business key department_id"
     columns:
       - name: hk_department
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: department_id
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -29,11 +29,11 @@ models:
     description: "Hub cho business key product_id"
     columns:
       - name: hk_product
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: product_id
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -41,11 +41,11 @@ models:
     description: "Hub cho business key order_id"
     columns:
       - name: hk_order
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: order_id
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -53,11 +53,11 @@ models:
     description: "Hub cho business key user_id"
     columns:
       - name: hk_user
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: user_id
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -65,104 +65,104 @@ models:
     description: "Link giua order va user"
     columns:
       - name: hk_link_order_user
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: hk_order
-        tests:
+        data_tests:
           - not_null
       - name: hk_user
-        tests:
+        data_tests:
           - not_null
 
   - name: link_order_product
     description: "Link giua order va product"
     columns:
       - name: hk_link_order_product
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: hk_order
-        tests:
+        data_tests:
           - not_null
       - name: hk_product
-        tests:
+        data_tests:
           - not_null
 
   - name: link_product_aisle
     description: "Link giua product va aisle"
     columns:
       - name: hk_link_product_aisle
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: hk_product
-        tests:
+        data_tests:
           - not_null
       - name: hk_aisle
-        tests:
+        data_tests:
           - not_null
 
   - name: link_product_department
     description: "Link giua product va department"
     columns:
       - name: hk_link_product_department
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: hk_product
-        tests:
+        data_tests:
           - not_null
       - name: hk_department
-        tests:
+        data_tests:
           - not_null
 
   - name: sat_aisle_details
     description: "Satellite mo ta ten aisle"
     columns:
       - name: hk_aisle
-        tests:
+        data_tests:
           - not_null
       - name: hashdiff
-        tests:
+        data_tests:
           - not_null
 
   - name: sat_department_details
     description: "Satellite mo ta ten department"
     columns:
       - name: hk_department
-        tests:
+        data_tests:
           - not_null
       - name: hashdiff
-        tests:
+        data_tests:
           - not_null
 
   - name: sat_product_details
     description: "Satellite mo ta thong tin co ban cua product"
     columns:
       - name: hk_product
-        tests:
+        data_tests:
           - not_null
       - name: hashdiff
-        tests:
+        data_tests:
           - not_null
 
   - name: sat_order_details
     description: "Satellite mo ta thong tin giao dich cua order"
     columns:
       - name: hk_order
-        tests:
+        data_tests:
           - not_null
       - name: hashdiff
-        tests:
+        data_tests:
           - not_null
 
   - name: sat_order_product_details
     description: "Satellite mo ta thuoc tinh cua moi quan he order-product"
     columns:
       - name: hk_link_order_product
-        tests:
+        data_tests:
           - not_null
       - name: hashdiff
-        tests:
+        data_tests:
           - not_null

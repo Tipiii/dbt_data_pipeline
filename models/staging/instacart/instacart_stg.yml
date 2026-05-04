@@ -6,7 +6,7 @@ models:
     columns:
       - name: aisle_id
         description: "Ma so cua aisle"
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -15,7 +15,7 @@ models:
     columns:
       - name: department_id
         description: "Ma so cua department"
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -24,7 +24,7 @@ models:
     columns:
       - name: order_id
         description: "Ma so cua order"
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -33,7 +33,7 @@ models:
     columns:
       - name: product_id
         description: "Ma so cua product"
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -42,11 +42,11 @@ models:
     columns:
       - name: order_id
         description: "Ma so cua order"
-        tests:
+        data_tests:
           - not_null
       - name: product_id
         description: "Ma so cua product"
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_order_products_train
@@ -54,9 +54,9 @@ models:
     columns:
       - name: order_id
         description: "Ma so cua order"
-        tests:
+        data_tests:
           - not_null
       - name: product_id
         description: "Ma so cua product"
-        tests:
+        data_tests:
           - not_null

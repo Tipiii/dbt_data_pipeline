@@ -5,41 +5,41 @@ models:
     description: "Feature table o grain order-product de train va score bai toan reorder prediction."
     columns:
       - name: candidate_key
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: order_id
-        tests:
+        data_tests:
           - not_null
       - name: user_id
-        tests:
+        data_tests:
           - not_null
       - name: product_id
-        tests:
+        data_tests:
           - not_null
       - name: eval_set
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               values: ['train', 'test']
       - name: product_name
-        tests:
+        data_tests:
           - not_null
       - name: aisle_id
-        tests:
+        data_tests:
           - not_null
       - name: department_id
-        tests:
+        data_tests:
           - not_null
       - name: user_prior_order_count
-        tests:
+        data_tests:
           - not_null
       - name: product_prior_order_count
-        tests:
+        data_tests:
           - not_null
       - name: up_order_count
-        tests:
+        data_tests:
           - not_null
       - name: up_orders_since_last_purchase
-        tests:
+        data_tests:
           - not_null

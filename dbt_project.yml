@@ -32,8 +32,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   dbt_capstone:
     # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
 
     staging:
       +schema: stg_instacart
