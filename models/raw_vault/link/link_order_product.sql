@@ -2,15 +2,20 @@
     materialized='incremental',
     incremental_strategy='merge',
     unique_key='hk_link_order_product',
-    on_schema_change='sync_all_columns'
+    tags=['raw_vault', 'link', 'link_order_product']
 ) }}
 
+{% set source_models = ['stg_order_products_prior', 'stg_order_products_train'] %}
+{% set link_hk_column = 'hk_link_order_product' %}
+{% set link_key_columns = ['order_id', 'product_id'] %}
+{% set hub_key_map = {
+    'hk_order': ['order_id'],
+    'hk_product': ['product_id']
+} %}
+
 {{ build_link(
-    source_models=['stg_order_products_prior', 'stg_order_products_train'],
-    link_hk_column='hk_link_order_product',
-    link_key_columns=['order_id', 'product_id'],
-    hub_key_map={
-        'hk_order': ['order_id'],
-        'hk_product': ['product_id']
-    }
+    source_models=source_models,
+    link_hk_column=link_hk_column,
+    link_key_columns=link_key_columns,
+    hub_key_map=hub_key_map
 ) }}
