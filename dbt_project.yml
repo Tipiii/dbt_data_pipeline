@@ -44,7 +44,5 @@ models:
       +materialized: table
       core:
         +schema: marts_core
-      ml:
-        +schema: marts_ml
       powerbi:
         +schema: marts_powerbi
