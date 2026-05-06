@@ -4,13 +4,15 @@
 )}}
 
 
-{% set source_model = 'products' %}
+{% set source_table = 'products' %}
 {% set source_name = 'raw_instacart' %}
 {% set business_key_cols = ['product_id'] %}
+{% set hashdiff_satellite_dict = none %}
 
 
 {{ stage(
-    source_model, 
-    source_name,
-    business_key_cols
+    source_table=source_table,
+    business_key_cols=business_key_cols,
+    hashdiff_satellite_dict=hashdiff_satellite_dict,
+    source_name=source_name
 ) }}
