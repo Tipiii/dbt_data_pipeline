@@ -10,8 +10,7 @@
 {% set hashdiff_satellite_dict = none %}
 
 {{ stage(
-    source_table=source_table,
-    business_key_cols=business_key_cols,
-    hashdiff_satellite_dict=hashdiff_satellite_dict,
-    source_name=source_name
+    source_model=source_table,
+    source_name=source_name,
+    business_key_cols=business_key_cols
 ) }}
