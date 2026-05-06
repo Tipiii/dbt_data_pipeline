@@ -1,6 +1,50 @@
 version: 2
 
 models:
+  - name: rpt_order_overview
+    description: "Bang tong hop 1 dong moi order de lam dashboard tong quan don hang."
+    columns:
+      - name: order_row_key
+        data_tests:
+          - not_null
+          - unique
+      - name: order_id
+        data_tests:
+          - not_null
+          - unique
+      - name: user_id
+        data_tests:
+          - not_null
+      - name: product_line_count
+        data_tests:
+          - not_null
+      - name: basket_size
+        data_tests:
+          - not_null
+      - name: reorder_rate
+        data_tests:
+          - not_null
+
+  - name: rpt_customer_behavior
+    description: "Bang tong hop 1 dong moi user de phan tich tan suat mua va xu huong reorder."
+    columns:
+      - name: user_id
+        data_tests:
+          - not_null
+          - unique
+      - name: total_orders
+        data_tests:
+          - not_null
+      - name: avg_basket_size
+        data_tests:
+          - not_null
+      - name: repeat_purchase_rate
+        data_tests:
+          - not_null
+      - name: new_product_rate
+        data_tests:
+          - not_null
+
   - name: rpt_department_reorder_cohort
     description: "Bang cohort theo department va thu tu don hang dau tien cua user trong department do."
     columns:
@@ -66,7 +110,7 @@ models:
           - not_null
 
   - name: rpt_product_reorder_ranking
-    description: "Bang xep hang san pham theo reorder rate, weighted reorder score va demand."
+    description: "Bang hieu suat san pham va nganh hang de xep hang reorder, demand va vi tri them vao gio."
     columns:
       - name: product_id
         data_tests:
@@ -84,7 +128,13 @@ models:
       - name: product_order_count
         data_tests:
           - not_null
+      - name: product_line_count
+        data_tests:
+          - not_null
       - name: reorder_rate
+        data_tests:
+          - not_null
+      - name: avg_add_to_cart_order
         data_tests:
           - not_null
       - name: weighted_reorder_score
