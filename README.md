@@ -1,22 +1,18 @@
-# dbt Capstone - Data Vault 2.0 tren BigQuery
+# THIẾT KẾ VÀ XÂY DỰNG HỆ THỐNG DATA PIPELINE CHO DỮ LIỆU BÁN LẺ CỦA INSTACART
 
-Project xay dung pipeline mo hinh du lieu theo chuan **Data Vault 2.0** bang `dbt` tren `Google BigQuery` cho bo du lieu Instacart.
+Project xây dựng pipeline theo chuẩn **Data Vault 2.0** bằng `dbt` trên `Google BigQuery` cho bộ dữ liệu Instacart
 
 ## Project Overview
 
-```text
-Raw (BigQuery) -> Staging (View) -> Raw Vault (Hub / Link / Satellite) -> Marts (Dim / Fact)
-```
-
-![Project Overview](Include/png/flow.png)
+![Project Overview](Include/png/Architecture.png)
 
 ## Architecture
 
-| Layer | Schema BigQuery | Materialization | Mo ta |
+| Layer | Schema BigQuery | Materialization | Mô tả |
 |---|---|---|---|
-| **Staging** | `stg_instacart` | view | Chuan hoa du lieu raw, tinh hash key va load timestamp |
+| **Staging** | `stg_instacart` | view | Chuẩn hóa dữ liệu raw, tính hashkey và load timestamp  |
 | **Raw Vault** | `raw_vault` | table | Hub, Link, Satellite theo Data Vault 2.0 |
-| **Marts** | `marts` | table | Dimension va Fact table phuc vu phan tich |
+| **Marts** | `marts` | table | Dimension, Fact table và Mart cho Power BI phục vụ phân tích và trực quan hóa |
 
 ## Technology
 
@@ -25,20 +21,6 @@ Raw (BigQuery) -> Staging (View) -> Raw Vault (Hub / Link / Satellite) -> Marts 
 - `Google BigQuery`
 - SQL + Jinja2 macro
 - `Kestra` (orchestration)
-
-
-## Data Sources
-
-Source `raw_instacart` trong `models/sources.yml`, dataset `dbt_dev_toni` tren BigQuery:
-
-| Bang | Mo ta |
-|---|---|
-| `aisles` | Danh muc quay hang |
-| `departments` | Danh muc nganh hang |
-| `orders` | Don hang cua khach hang |
-| `order_products_prior` | Chi tiet san pham trong don prior |
-| `order_products_train` | Chi tiet san pham trong don train |
-| `products` | Thong tin san pham |
 
 ## Documentation
 
